@@ -16,11 +16,11 @@ class SalaamPartnerServices extends NoorServices
     protected $method;
 
     protected $endpoint;
+    public $has_failed;
     public function verifyPartnerAccount($request)
     {
 
         $this->request = $request;
-        $this->has_failed = false;
 
         $this->rules = [
             'bank_account' => 'required|numeric',

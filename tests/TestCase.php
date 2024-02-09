@@ -1,10 +1,23 @@
 <?php
 
-namespace Tests;
+namespace Noorfarooqy\Salaamch\Tests;
 
-use PHPUnit\Framework\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Noorfarooqy\Salaamch\SalaamchServiceProvider;
+use Orchestra\Testbench\Concerns\CreatesApplication;
+use Orchestra\Testbench\TestCase as Orchestra;
 
-abstract class TestCase extends BaseTestCase
+class TestCase extends Orchestra
 {
-    //
+    // use CreatesApplication, DatabaseTransactions;
+    protected function setUp(): void
+    {
+        parent::setUp();
+    }
+    protected function getPackageProviders($app)
+    {
+        return [
+            SalaamchServiceProvider::class,
+        ];
+    }
 }

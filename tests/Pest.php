@@ -11,8 +11,9 @@
 |
 */
 
-// uses(Tests\TestCase::class)->in('Feature');
+use Noorfarooqy\Salaamch\Tests\TestCase;
 
+uses(TestCase::class)->in(__DIR__, 'config/salaamch.php');
 /*
 |--------------------------------------------------------------------------
 | Expectations
