@@ -13,6 +13,9 @@ class SalaamchServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/salaamch.php' => config_path('salaamch.php'),
         ], 'salaamch-config');
+        $this->publishes([
+            __DIR__ . '/../database/migrations/' => database_path('migrations'),
+        ], 'salaamch-migrations');
     }
     public function register()
     {
