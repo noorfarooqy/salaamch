@@ -118,7 +118,7 @@ class SalaamPartnerServices extends NoorServices
             $deposit = ClientSchTransaction::create([
                 'src_transaction_id' => $trn_id,
                 'bank_transaction_id' => $trn_id,
-                'src_tran_head_id' => $srcId,
+                'src_trn_head_id' => $srcId,
                 'sender_id' => $data['sender_id'],
                 'sender_name' => $data['sender_name'],
                 'amount_in_usd' => $data['amount_in_usd'],
