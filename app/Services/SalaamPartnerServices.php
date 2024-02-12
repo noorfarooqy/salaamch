@@ -86,7 +86,7 @@ class SalaamPartnerServices extends NoorServices
         $trn_id = time();
         $srcId = 'ESB' . gmdate('ymdis', time());
         $data['request_ip'] = $request->ip();
-        $data['initiator'] = $request->user()->id;
+        $data['initiator'] = $request->user()?->id;
         $data['request_ref'] = $trn_id;
 
         $this->payload = [
