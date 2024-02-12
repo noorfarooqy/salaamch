@@ -125,7 +125,7 @@ class SalaamPartnerServices extends NoorServices
                 'local_amount' => $data['amount_in_usd'],
                 'beneficiary_account_number' => $data['beneficiary_account_number'],
                 'description' => $data['description'],
-                'bankCode' => env('SCH_BANK_CODE'),
+                'bank_code' => env('SCH_BANK_CODE'),
                 'initiated_by' => $request->user()?->id,
             ]);
 
