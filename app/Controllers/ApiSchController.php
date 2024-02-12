@@ -13,4 +13,9 @@ class ApiSchController extends Controller
     {
         return $salaamPartnerServices->verifyPartnerAccount($request);
     }
+
+    public function depositAccount(Request $request, SalaamPartnerServices $salaamPartnerServices)
+    {
+        return $salaamPartnerServices->depositIntoAccount($request);
+    }
 }
