@@ -78,7 +78,7 @@ class SalaamPartnerServices extends NoorServices
 
         $this->customValidate();
         if ($this->has_failed) {
-            $this->setError($this->getMessage(), ErrorCodes::sch_bank_account_required);
+            $this->setError($this->getMessage(), ErrorCodes::sch_bank_account_required->value);
             return $this->getResponse();
         }
         $data = $this->validatedData();
@@ -158,7 +158,7 @@ class SalaamPartnerServices extends NoorServices
 
             return $this->getResponse($response);
         } catch (Throwable $th) {
-            $this->setError($th->getMessage(), ErrorCodes::sch_bank_deposit_data_entry_error);
+            $this->setError($th->getMessage(), ErrorCodes::sch_bank_deposit_data_entry_error->value);
             return $this->getResponse();
         }
     }
@@ -176,7 +176,7 @@ class SalaamPartnerServices extends NoorServices
 
         $this->customValidate();
         if ($this->has_failed) {
-            $this->setError($this->getMessage(), ErrorCodes::sch_bank_account_required);
+            $this->setError($this->getMessage(), ErrorCodes::sch_bank_account_required->value);
             return $this->getResponse();
         }
         $data = $this->validatedData();
@@ -192,7 +192,7 @@ class SalaamPartnerServices extends NoorServices
 
         $response = $this->SendSchRequest();
         if ($response["statusCode"] != 200) {
-            $this->setError($response['statusMessage'], ErrorCodes::sch_transaction_not_found);
+            $this->setError($response['statusMessage'], ErrorCodes::sch_transaction_not_found->value);
             $this->setStatus($response['statusCode']);
             return $this->getResponse();
         }
