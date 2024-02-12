@@ -16,7 +16,7 @@
             "Noorfarooqy\\Salaamch\\Helpers\\": "app/Helpers/",
             "Noorfarooqy\\Salaamch\\Events\\": "app/Events/",
             "Noorfarooqy\\Salaamch\\Tests\\": "tests/",
-            "Noorfarooqy\\Salaamch\\DataModels\\": "DataModels/"
+            "Noorfarooqy\\Salaamch\\DataModels\\": "app/DataModels/"
         }
     },
     "authors": [
