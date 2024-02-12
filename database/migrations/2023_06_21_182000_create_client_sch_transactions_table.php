@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('bank_account_pan')->nullable();
             $table->string('bank_account_title')->nullable();
             $table->boolean('is_success')->default(0);
-            $table->foreignId('initiated_by')->references('id')->on('users');
+            $table->foreignId('initiated_by')->nullable()->references('id')->on('users');
             $table->timestamps();
         });
     }
