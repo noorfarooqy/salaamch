@@ -4,8 +4,65 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb60c6b206c93879e50409b0cf3eb586",
+    "content-hash": "de56bcaeccfdbf358c737ae52de71083",
     "packages": [
+        {
+            "name": "artisaninweb/laravel-soap",
+            "version": "0.3.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/notfalsedev/laravel-soap.git",
+                "reference": "809073fe1116e3e3daadcf8571fc58b0a9603574"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/notfalsedev/laravel-soap/zipball/809073fe1116e3e3daadcf8571fc58b0a9603574",
+                "reference": "809073fe1116e3e3daadcf8571fc58b0a9603574",
+                "shasum": ""
+            },
+            "require": {
+                "ext-soap": "*",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Artisaninweb\\SoapWrapper\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "SoapWrapper": "Artisaninweb\\SoapWrapper\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Artisaninweb\\SoapWrapper": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael van de Rijt",
+                    "email": "me@mvdrijt.com"
+                }
+            ],
+            "description": "A SoapClient wrapper integration for Laravel",
+            "keywords": [
+                "client",
+                "laravel",
+                "soap",
+                "wrapper"
+            ],
+            "support": {
+                "issues": "https://github.com/notfalsedev/laravel-soap/issues",
+                "source": "https://github.com/notfalsedev/laravel-soap/tree/0.3.0.10"
+            },
+            "time": "2021-05-04T14:48:03+00:00"
+        },
         {
             "name": "bacon/bacon-qr-code",
             "version": "2.0.8",
@@ -2314,6 +2371,105 @@
                 "source": "https://github.com/nette/utils/tree/v4.0.4"
             },
             "time": "2024-01-17T16:50:36+00:00"
+        },
+        {
+            "name": "noorfarooqy/bank_gateway",
+            "version": "v1.0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/noorfarooqy/bank_gateway.git",
+                "reference": "cb4400dbd5971b82005fee59bce7622a91af8eb7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/noorfarooqy/bank_gateway/zipball/cb4400dbd5971b82005fee59bce7622a91af8eb7",
+                "reference": "cb4400dbd5971b82005fee59bce7622a91af8eb7",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^10.0",
+                "noorfarooqy/flexcube": "^1.0",
+                "noorfarooqy/noorauth": "^1.0"
+            },
+            "require-dev": {
+                "darkaonline/l5-swagger": "^8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Noorfarooqy\\BankGateway\\": "src/",
+                    "Noorfarooqy\\BankGateway\\Banks\\": "app/Banks/",
+                    "Noorfarooqy\\BankGateway\\Services\\": "app/Services/",
+                    "Noorfarooqy\\BankGateway\\Controllers\\": "app/Controllers/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "noorfarooqy",
+                    "email": "noor@drongo.vip"
+                }
+            ],
+            "description": "Bank Interface",
+            "support": {
+                "issues": "https://github.com/noorfarooqy/bank_gateway/issues",
+                "source": "https://github.com/noorfarooqy/bank_gateway/tree/v1.0.0.2"
+            },
+            "time": "2024-02-14T19:40:06+00:00"
+        },
+        {
+            "name": "noorfarooqy/flexcube",
+            "version": "v1.0.22",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/noorfarooqy/flexcube.git",
+                "reference": "032d178af0d34200192b08ca3b4fbea9eb55fbf3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/noorfarooqy/flexcube/zipball/032d178af0d34200192b08ca3b4fbea9eb55fbf3",
+                "reference": "032d178af0d34200192b08ca3b4fbea9eb55fbf3",
+                "shasum": ""
+            },
+            "require": {
+                "artisaninweb/laravel-soap": "0.3.0.10",
+                "laravel/framework": "^10.0",
+                "noorfarooqy/noorauth": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Noorfarooqy\\Flexcube\\FlexcubeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Noorfarooqy\\Flexcube\\": "src/",
+                    "Noorfarooqy\\Flexcube\\Helpers\\": "app/Helpers",
+                    "Noorfarooqy\\Flexcube\\Services\\": "app/Services"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "noorfarooqy",
+                    "email": "noor@drongo.vip"
+                }
+            ],
+            "description": "Flexcube Integration with Laravel",
+            "support": {
+                "issues": "https://github.com/noorfarooqy/flexcube/issues",
+                "source": "https://github.com/noorfarooqy/flexcube/tree/v1.0.22"
+            },
+            "time": "2023-12-06T16:35:27+00:00"
         },
         {
             "name": "noorfarooqy/noorauth",
