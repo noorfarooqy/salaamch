@@ -6,7 +6,7 @@
         "laravel/framework": "^10.0",
         "noorfarooqy/noorauth": "^1.0",
         "darkaonline/l5-swagger": "^8.5",
-        "noorfarooqy/bank_gateway": "v1.0.0.4"
+        "noorfarooqy/bank_gateway": "v1.0.0.5"
     },
     "license": "MIT",
     "autoload": {
