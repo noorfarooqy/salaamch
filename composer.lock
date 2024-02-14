@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7a03dad38500714befd6bdabdb42d6f",
+    "content-hash": "2bbcb692bba987121f411bab318bb6fa",
     "packages": [
         {
             "name": "artisaninweb/laravel-soap",
@@ -2374,7 +2374,7 @@
         },
         {
             "name": "noorfarooqy/bank_gateway",
-            "version": "v1.0.0.7",
+            "version": "v1.0.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/noorfarooqy/bank_gateway.git",
@@ -2423,7 +2423,7 @@
             "description": "Bank Interface",
             "support": {
                 "issues": "https://github.com/noorfarooqy/bank_gateway/issues",
-                "source": "https://github.com/noorfarooqy/bank_gateway/tree/v1.0.0.7"
+                "source": "https://github.com/noorfarooqy/bank_gateway/tree/v1.0.0.8"
             },
             "time": "2024-02-14T20:15:31+00:00"
         },
