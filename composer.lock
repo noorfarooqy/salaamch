@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1c47e70e27b98c9aba78acc79eb78f6",
+    "content-hash": "b7a03dad38500714befd6bdabdb42d6f",
     "packages": [
         {
             "name": "artisaninweb/laravel-soap",
@@ -2374,16 +2374,16 @@
         },
         {
             "name": "noorfarooqy/bank_gateway",
-            "version": "v1.0.0.6",
+            "version": "v1.0.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/noorfarooqy/bank_gateway.git",
-                "reference": "07afd2d29d926fbf12a3792416ee118f100779ce"
+                "reference": "33966770caf7deffb6ed0928b8517330ab8f4b82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/noorfarooqy/bank_gateway/zipball/07afd2d29d926fbf12a3792416ee118f100779ce",
-                "reference": "07afd2d29d926fbf12a3792416ee118f100779ce",
+                "url": "https://api.github.com/repos/noorfarooqy/bank_gateway/zipball/33966770caf7deffb6ed0928b8517330ab8f4b82",
+                "reference": "33966770caf7deffb6ed0928b8517330ab8f4b82",
                 "shasum": ""
             },
             "require": {
@@ -2423,9 +2423,9 @@
             "description": "Bank Interface",
             "support": {
                 "issues": "https://github.com/noorfarooqy/bank_gateway/issues",
-                "source": "https://github.com/noorfarooqy/bank_gateway/tree/v1.0.0.6"
+                "source": "https://github.com/noorfarooqy/bank_gateway/tree/v1.0.0.7"
             },
-            "time": "2024-02-14T20:12:13+00:00"
+            "time": "2024-02-14T20:15:31+00:00"
         },
         {
             "name": "noorfarooqy/flexcube",
