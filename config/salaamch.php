@@ -22,4 +22,10 @@ return [
             ]
         ],
     ],
+    'host' => [
+        'uri' => env('SCH_HOST_URI'),
+        'api_rate' => env('SCH_HOST_RATE_API'),
+        'api_deposit_success' => env('SCH_DEPOSIT_SUCCESS_API'),
+        'api_deposit_failed' => env('SCH_DEPOSIT_FAILED_API'),
+    ],
 ];

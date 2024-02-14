@@ -3,7 +3,7 @@
     "description": "Salaam Clearing House",
     "type": "library",
     "require": {
-        "laravel/framework": "^10.43",
+        "laravel/framework": "^10.0",
         "noorfarooqy/noorauth": "^1.0",
         "darkaonline/l5-swagger": "^8.5"
     },
@@ -16,7 +16,9 @@
             "Noorfarooqy\\Salaamch\\Helpers\\": "app/Helpers/",
             "Noorfarooqy\\Salaamch\\Events\\": "app/Events/",
             "Noorfarooqy\\Salaamch\\Tests\\": "tests/",
-            "Noorfarooqy\\Salaamch\\DataModels\\": "app/DataModels/"
+            "Noorfarooqy\\Salaamch\\DataModels\\": "app/DataModels/",
+            "Noorfarooqy\\Salaamch\\Traits\\": "app/Traits/",
+            "Noorfarooqy\\Salaamch\\Partners\\": "app/Partners/"
         }
     },
     "authors": [

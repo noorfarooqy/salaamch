@@ -5,14 +5,19 @@ namespace Noorfarooqy\Salaamch\Services;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Noorfarooqy\NoorAuth\Services\NoorServices;
-use Noorfarooqy\Salaamch\DataModels\ClientSchTransaction;
+use Noorfarooqy\Salaamch\DataModels\SchTransaction;
 use Noorfarooqy\Salaamch\Events\PartnerDepositSentEvent;
 use Noorfarooqy\Salaamch\Helpers\ErrorCodes;
+use Noorfarooqy\Salaamch\Traits\SalaamClearingHouseTrait;
 use Throwable;
 
+/**
+ * Class SalaamPartnerServices
+ * @package Noorfarooqy\Salaamch\Services
+ */
 class SalaamPartnerServices extends NoorServices
 {
-
+    use SalaamClearingHouseTrait;
     protected $payload;
     protected $language = "english";
     protected $security;
@@ -20,8 +25,17 @@ class SalaamPartnerServices extends NoorServices
 
     protected $endpoint;
     public $has_failed;
+
+    /**
+     * @param $request
+     * @return object
+     */
     public function verifyPartnerAccount($request)
     {
+
+        if (!$this->hasCorrectConfigs()) {
+            return $this->getResponse();
+        }
 
         $this->request = $request;
 
@@ -115,7 +129,7 @@ class SalaamPartnerServices extends NoorServices
 
         try {
             DB::beginTransaction();
-            $deposit = ClientSchTransaction::create([
+            $deposit = SchTransaction::create([
                 'src_transaction_id' => $trn_id,
                 'bank_transaction_id' => $trn_id,
                 'src_trn_head_id' => $srcId,

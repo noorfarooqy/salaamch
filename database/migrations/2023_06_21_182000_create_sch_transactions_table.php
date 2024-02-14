@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('client_sch_transactions', function (Blueprint $table) {
+        Schema::create('sch_transactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('partner_id')->references('id')->on('sch_partners');
             $table->string('src_transaction_id')->unique();
             $table->string('src_trn_head_id');
             $table->string('bank_transaction_id')->nullable();
