@@ -8,6 +8,7 @@ use Noorfarooqy\NoorAuth\Services\NoorServices;
 use Noorfarooqy\Salaamch\DataModels\SchTransaction;
 use Noorfarooqy\Salaamch\Events\PartnerDepositSentEvent;
 use Noorfarooqy\Salaamch\Helpers\ErrorCodes;
+use Noorfarooqy\Salaamch\Traits\ConnectionTrait;
 use Noorfarooqy\Salaamch\Traits\SalaamClearingHouseTrait;
 use Throwable;
 
@@ -18,6 +19,7 @@ use Throwable;
 class SalaamPartnerServices extends NoorServices
 {
     use SalaamClearingHouseTrait;
+    use ConnectionTrait;
     protected $payload;
     protected $language = "english";
     protected $security;
@@ -32,10 +34,6 @@ class SalaamPartnerServices extends NoorServices
      */
     public function verifyPartnerAccount($request)
     {
-
-        if (!$this->hasCorrectConfigs()) {
-            return $this->getResponse();
-        }
 
         $this->request = $request;
 
@@ -73,6 +71,7 @@ class SalaamPartnerServices extends NoorServices
 
     public function DepositIntoAccount($request)
     {
+        $this->initializeSalaamClearingHouse();
         $this->request = $request;
 
         $this->rules = [
@@ -82,12 +81,12 @@ class SalaamPartnerServices extends NoorServices
             'sender_telephone_number' => 'required|numeric',
             'beneficiary_telephone' => 'required|numeric',
             'beneficiary_account_number' => 'required|numeric',
-            'amount_in_usd' => 'required|numeric|min:1|max:' . env('SCH_MAX_AMOUNT', 10000),
+            'amount_in_usd' => 'required|numeric|min:1|max:' . env('SCH_MAX_USD_AMOUNT', 1000),
             'description' => 'required|string|min:4|max:125',
             'agent_country' => 'required|string|max:45|min:2',
             'agent_branch' => 'required|string|max:45|min:3',
             'agent_name' => 'required|string|max:45|min:4',
-
+            'checksum' => 'required|string',
         ];
 
         $this->customValidate();
@@ -96,6 +95,19 @@ class SalaamPartnerServices extends NoorServices
             return $this->getResponse();
         }
         $data = $this->validatedData();
+
+        if ($data['checksum'] != $checksum = $this->generateChecksum($request->except('checksum'))) {
+            $this->setError('Checksum does not match ' . $checksum, ErrorCodes::sch_deposit_checksum_failed->value);
+            return $this->getResponse();
+        }
+
+
+        $data = $this->confirmBalanceAndRate($data);
+        if (!$data) {
+            return $this->getResponse();
+        }
+
+        $blocked_amount = $this->bank->blockAmount($data['sender_account_number'],$data['local_amount']);
 
         $trn_id = time();
         $srcId = 'ESB' . gmdate('ymdis', time());
@@ -136,7 +148,7 @@ class SalaamPartnerServices extends NoorServices
                 'sender_id' => $data['sender_id'],
                 'sender_name' => $data['sender_name'],
                 'amount_in_usd' => $data['amount_in_usd'],
-                'local_amount' => $data['amount_in_usd'],
+                'local_amount' => $data['local_amount'],
                 'beneficiary_account_number' => $data['beneficiary_account_number'],
                 'description' => $data['description'],
                 'bank_code' => env('SCH_BANK_CODE'),
@@ -217,21 +229,31 @@ class SalaamPartnerServices extends NoorServices
         return $this->getResponse($response);
     }
 
-    public function SendSchRequest()
+    public function confirmBalanceAndRate($data)
     {
-        $this->security = [
-            "login" => config('salaamch.login'),
-            "password" => config('salaamch.password'),
-            "secret" => config('salaamch.secret'),
-        ];
 
-        PartnerDepositSentEvent::dispatch($this->payload);
-        $this->payload['secret'] = $this->security;
-        $this->payload['method'] = $this->method;
-        $this->payload['languageName'] = $this->language;
-        $url = config('salaamch.endpoints.root') . $this->endpoint;
-        $response = Http::withHeaders(['Content-Type' => 'application/json'])->post($url, $this->payload);
-
-        return $response->json();
+        $balance = $this->bank->getBalance($data['sender_account_number']);
+        if (!$balance) {
+            $this->setError('Account balance could not be fetched - ' . $this->bank->getMessage(), ErrorCodes::sch_bank_account_not_found->value);
+            return false;
+        }
+        if ($balance->data->ccy == 'USD') {
+            $data['local_amount'] = $data['amount_in_usd'];
+        } else {
+            $rate = $this->bank->getExchangeRate($from = 'USD', $to = 'KES');
+            if (!$rate) {
+                $this->setError('Exchange rate could not be fetched - ' . $this->bank->getMessage(), ErrorCodes::sch_bank_could_not_fetch_fx_rate->value);
+                return false;
+            } else if ($rate->data->salerate <= 0 || $rate->data?->salerate == null) {
+                $this->setError('Exchange rate is not accurate - ' . $rate->data?->salerate . ' - ' . $this->bank->getMessage(), ErrorCodes::sch_bank_could_not_fetch_fx_rate->value);
+                return false;
+            }
+            $data['local_amount'] = $data['amount_in_usd'] * $rate?->data?->salerate;
+        }
+        if ($balance->data->current_balance < ($data['local_amount'] + $this->bank->getTransactionCharge($data['local_amount'], 'sch'))) {
+            $this->setError('Insufficient account balance - ' . $balance->data->current_balance, ErrorCodes::sch_insufficient_account_balance->value);
+            return false;
+        }
+        return $data;
     }
 }

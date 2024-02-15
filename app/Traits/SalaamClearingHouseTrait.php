@@ -2,26 +2,23 @@
 
 namespace Noorfarooqy\Salaamch\Traits;
 
+use Noorfarooqy\BankGateway\Services\BankServices;
 use Noorfarooqy\Salaamch\Helpers\ErrorCodes;
 
 trait SalaamClearingHouseTrait
 {
+    public $bank;
 
-    public function hasCorrectConfigs()
+    public function initializeSalaamClearingHouse()
     {
-        $required_configs = [
-            'host' => config('salaamch.host.uri'),
-            'api_rate' => config('salaamch.host.api_rate'),
-            'api_deposit_success' => config('salaamch.host.api_deposit_success'),
-            'api_deposit_failed' => config('salaamch.host.api_deposit_failed'),
-        ];
-        foreach ($required_configs as $key => $config) {
-            if ($config == null) {
-                $this->setError('Missing ' . $key . ' config', ErrorCodes::sch_missing_config->value);
-                return false;
-            }
-        }
-
-        return true;
+        $gateway_key = config('bankgateway.configured_gateway');
+        $bank_class = config('bankgateway.bank_gateways')[$gateway_key];
+        $this->bank = new \ReflectionClass($bank_class);
     }
+    public function generateChecksum(array $data)
+    {
+        return md5(collect($data)->sortKeys()->join(','));
+    }
+
+    
 }

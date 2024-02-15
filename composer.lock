@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44077d5cce1895e1b349993cf889fbe2",
+    "content-hash": "55585c4dd82ed9f962ee7684f426007e",
     "packages": [
         {
             "name": "artisaninweb/laravel-soap",
@@ -2374,16 +2374,16 @@
         },
         {
             "name": "noorfarooqy/bank_gateway",
-            "version": "v1.0.0.9",
+            "version": "v1.0.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/noorfarooqy/bank_gateway.git",
-                "reference": "1b23e4fbb3362e29161389f6a1b524e387fd6742"
+                "reference": "5410cf5281d1182104b22ae73cdc503943a5aed1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/noorfarooqy/bank_gateway/zipball/1b23e4fbb3362e29161389f6a1b524e387fd6742",
-                "reference": "1b23e4fbb3362e29161389f6a1b524e387fd6742",
+                "url": "https://api.github.com/repos/noorfarooqy/bank_gateway/zipball/5410cf5281d1182104b22ae73cdc503943a5aed1",
+                "reference": "5410cf5281d1182104b22ae73cdc503943a5aed1",
                 "shasum": ""
             },
             "require": {
@@ -2392,7 +2392,9 @@
                 "noorfarooqy/noorauth": "^1.0"
             },
             "require-dev": {
-                "darkaonline/l5-swagger": "^8.5"
+                "darkaonline/l5-swagger": "^8.5",
+                "orchestra/testbench": "^8.21",
+                "phpunit/phpunit": "^10.5"
             },
             "type": "library",
             "extra": {
@@ -2406,6 +2408,7 @@
                 "psr-4": {
                     "Noorfarooqy\\BankGateway\\": "src/",
                     "Noorfarooqy\\BankGateway\\Banks\\": "app/Banks/",
+                    "Noorfarooqy\\BankGateway\\Tests\\": "test/",
                     "Noorfarooqy\\BankGateway\\Services\\": "app/Services/",
                     "Noorfarooqy\\BankGateway\\Controllers\\": "app/Controllers/"
                 }
@@ -2423,9 +2426,9 @@
             "description": "Bank Interface",
             "support": {
                 "issues": "https://github.com/noorfarooqy/bank_gateway/issues",
-                "source": "https://github.com/noorfarooqy/bank_gateway/tree/v1.0.0.9"
+                "source": "https://github.com/noorfarooqy/bank_gateway/tree/v1.0.0.10"
             },
-            "time": "2024-02-14T20:27:22+00:00"
+            "time": "2024-02-15T15:06:51+00:00"
         },
         {
             "name": "noorfarooqy/flexcube",
