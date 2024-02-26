@@ -10,8 +10,15 @@ jobs:
         pull-requests: write
         repository-projects: write
     steps:
-    - uses: actions/checkout@v2
-    - uses: Klemensas/action-autotag@stable
+        - name: checkout code
+          id: checkout_code
+          uses: actions/checkout@v2
+        - name: create release
+          id: create_tag
+          uses: actions/create-release@v1
+        - name: Auto tag release
+          id: auto_tag_release
+          uses: Klemensas/action-autotag@stable
       with:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         tag_prefix: "v"
