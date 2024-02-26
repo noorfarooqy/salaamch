@@ -4,6 +4,7 @@ namespace Noorfarooqy\Salaamch\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Noorfarooqy\NoorAuth\Services\NoorServices;
 use Noorfarooqy\Salaamch\DataModels\SchTransaction;
 use Noorfarooqy\Salaamch\Events\PartnerDepositSentEvent;
@@ -238,6 +239,7 @@ class SalaamPartnerServices extends NoorServices
             $this->setError('Account balance could not be fetched - ' . $this->bank->getMessage(), ErrorCodes::sch_bank_account_not_found->value);
             return false;
         }
+        Log::info($balance);
         if ($balance->data->ccy == 'USD') {
             $data['local_amount'] = $data['amount_in_usd'];
         } else {
