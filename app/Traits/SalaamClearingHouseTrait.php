@@ -13,7 +13,7 @@ trait SalaamClearingHouseTrait
     {
         $gateway_key = config('bankgateway.configured_gateway');
         $bank_class = config('bankgateway.bank_gateways')[$gateway_key];
-        $this->bank = new \ReflectionClass($bank_class);
+        $this->bank = new $bank_class;
     }
     //set to only data
     public function generateChecksum($data)
