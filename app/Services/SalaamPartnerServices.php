@@ -231,6 +231,7 @@ class SalaamPartnerServices extends NoorServices
 
     public function confirmBalanceAndRate($data)
     {
+        $this->initializeSalaamClearingHouse();
 
         $balance = $this->bank->getBalance($data['sender_account_number']);
         if (!$balance) {
