@@ -1,8 +1,14 @@
 name: Create Tag and release
 
-on: ['push', 'pull_request']
-      # Sequence of patterns matched against refs/tags
-
+on:
+    push:
+      tags:
+        - 'v*' 
+      branches:
+      - master
+    pull_request:
+      branches:
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
