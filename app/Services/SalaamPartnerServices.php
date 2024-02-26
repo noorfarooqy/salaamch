@@ -107,7 +107,7 @@ class SalaamPartnerServices extends NoorServices
             return $this->getResponse();
         }
 
-        $blocked_amount = $this->bank->blockAmount($data['sender_account_number'],$data['local_amount']);
+        $blocked_amount = $this->bank->blockAmount($data['sender_account_number'], $data['local_amount']);
 
         $trn_id = time();
         $srcId = 'ESB' . gmdate('ymdis', time());

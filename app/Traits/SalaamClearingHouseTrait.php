@@ -15,10 +15,8 @@ trait SalaamClearingHouseTrait
         $bank_class = config('bankgateway.bank_gateways')[$gateway_key];
         $this->bank = new \ReflectionClass($bank_class);
     }
-    public function generateChecksum(array $data)
+    public function generateChecksum($data)
     {
         return md5(collect($data)->sortKeys()->join(','));
     }
-
-    
 }
