@@ -26,6 +26,8 @@ jobs:
                 - Second Change
             draft: false
             prerelease: false
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         - name: Auto tag release
           id: auto_tag_release
           uses: Klemensas/action-autotag@stable
