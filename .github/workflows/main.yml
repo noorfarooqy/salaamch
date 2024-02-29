@@ -3,7 +3,7 @@ name: Create Tag and release
 on: ['push', 'pull_request']
       # Sequence of patterns matched against refs/tags
 env: 
-    version_name: "1.0.1.37"
+    version_name: "1.0.1.38"
 jobs:
   build:
     runs-on: ubuntu-latest

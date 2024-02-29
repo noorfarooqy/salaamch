@@ -173,6 +173,7 @@ class SalaamPartnerServices extends NoorServices
                 'initiated_by' => $request->user()?->id,
             ]);
 
+            Log::info('before sending request');
             $response = $this->SendSchRequest();
 
             if ($response["statusCode"] != 200) {
@@ -184,6 +185,7 @@ class SalaamPartnerServices extends NoorServices
                 DB::commit();
                 return $this->getResponse();
             }
+            Log::info('after sending request');
 
             $deposit->charge_amount = $response['transactionInformation']['chargeAmount'];
             $deposit->bank_transaction_id = $response['transactionInformation']['bankTransactionId'];
@@ -195,6 +197,7 @@ class SalaamPartnerServices extends NoorServices
             $deposit->is_success = $response['statusCode'] == 200;
             $deposit->save();
 
+            Log::info('post sending request');
             $this->setError('', 0);
             $this->setSuccess('success');
 
