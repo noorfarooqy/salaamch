@@ -109,6 +109,11 @@ class SalaamPartnerServices extends NoorServices
         }
 
         $blocked_amount = $this->bank->blockAmount($data['sender_account_number'], $data['local_amount']);
+        $blocked = $blocked_amount->original;
+        if ($blocked['error_code'] != 0) {
+            $this->setError($blocked["error_message"]);
+            return $this->getResponse();
+        }
 
         $trn_id = time();
         $srcId = 'ESB' . gmdate('ymdis', time());
@@ -245,14 +250,15 @@ class SalaamPartnerServices extends NoorServices
             $data['local_amount'] = $data['amount_in_usd'];
         } else {
             $rate = $this->bank->getExchangeRate($from = 'USD', $to = 'KES');
+            $rate = $rate->original['data'];
             if (!$rate) {
                 $this->setError('Exchange rate could not be fetched - ' . $this->bank->getMessage(), ErrorCodes::sch_bank_could_not_fetch_fx_rate->value);
                 return false;
-            } else if ($rate->data->salerate <= 0 || $rate->data?->salerate == null) {
-                $this->setError('Exchange rate is not accurate - ' . $rate->data?->salerate . ' - ' . $this->bank->getMessage(), ErrorCodes::sch_bank_could_not_fetch_fx_rate->value);
+            } else if ($rate['salerate'] <= 0 || $rate['salerate'] == null) {
+                $this->setError('Exchange rate is not accurate - ' . $rate['salerate'] . ' - ' . $this->bank->getMessage(), ErrorCodes::sch_bank_could_not_fetch_fx_rate->value);
                 return false;
             }
-            $data['local_amount'] = $data['amount_in_usd'] * $rate?->data?->salerate;
+            $data['local_amount'] = $data['amount_in_usd'] * $rate['salerate'];
         }
         if ($balance['current_balance'] < ($data['local_amount'] + $this->bank->getTransactionCharge($data['local_amount'], 'sch'))) {
             $this->setError('Insufficient account balance - ' . $balance['current_balance'], ErrorCodes::sch_insufficient_account_balance->value);
