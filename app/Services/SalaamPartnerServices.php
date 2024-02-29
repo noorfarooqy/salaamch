@@ -176,6 +176,8 @@ class SalaamPartnerServices extends NoorServices
             Log::info('before sending request');
             $response = $this->SendSchRequest();
 
+            Log::info('response');
+            Log::info($response);
             if ($response["statusCode"] != 200) {
                 $this->setError($response['statusMessage']);
                 // $this->setStatus($response['statusCode']);
