@@ -9,6 +9,11 @@ use Noorfarooqy\Salaamch\Services\SalaamPartnerServices;
 class ApiSchController extends Controller
 {
 
+
+    public function registerPartner(Request $request, SalaamPartnerServices $salaamPartnerServices)
+    {
+        return $salaamPartnerServices->registerPartner($request);
+    }
     public function verifyAccount(Request $request, SalaamPartnerServices $salaamPartnerServices)
     {
         return $salaamPartnerServices->verifyPartnerAccount($request);

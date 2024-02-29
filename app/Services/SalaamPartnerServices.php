@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Noorfarooqy\NoorAuth\Services\NoorServices;
+use Noorfarooqy\Salaamch\DataModels\SchPartner;
+use Noorfarooqy\Salaamch\DataModels\SchPartnerUser;
 use Noorfarooqy\Salaamch\DataModels\SchTransaction;
 use Noorfarooqy\Salaamch\Events\PartnerDepositSentEvent;
 use Noorfarooqy\Salaamch\Helpers\ErrorCodes;
@@ -150,8 +152,14 @@ class SalaamPartnerServices extends NoorServices
         $this->method = config('sch_config.endpoints.methods.deposit.name');
 
         try {
+            $partner = SchPartnerUser::where('user', $request->user()?->id);
+            if (!$partner) {
+                $this->setError('Partner not found');
+                return $this->getResponse();
+            }
             DB::beginTransaction();
             $deposit = SchTransaction::create([
+                'partner_id' => $partner->partner_id,
                 'src_transaction_id' => $trn_id,
                 'bank_transaction_id' => $trn_id,
                 'src_trn_head_id' => $srcId,
@@ -269,5 +277,36 @@ class SalaamPartnerServices extends NoorServices
             return false;
         }
         return $data;
+    }
+
+
+    public function registerPartner($request)
+    {
+        $this->request = $request;
+        $this->rules = [
+            'partner_name' => 'required|string|max:75|unique:partner_name',
+            'partner_country' => 'required|string|max:45',
+            'partner_city' => 'required|string|max:45',
+            'partner_email' => 'required|email|unique:partner_email',
+            'partner_telephone' => 'required|string|max:12|unique:partner_telephone',
+            'partner_contact_name' => 'required|string|max:45'
+        ];
+        $this->customValidate();
+        if ($this->has_failed) {
+            return $this->getResponse();
+        }
+        $data = $this->validatedData();
+        $data['created_by'] = $request->user()?->id;
+        try {
+            $partner = SchPartner::create($data);
+            $partner_user = SchPartnerUser::create([
+                'partner_id' => $partner->id,
+                'user' => $request->user()?->id,
+                'created_by' => $request->user()?->id,
+            ]);
+        } catch (Throwable $th) {
+            $this->setError($th->getMessage());
+            return $this->getResponse();
+        }
     }
 }

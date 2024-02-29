@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70de2a408c8aa389589277b931355420",
+    "content-hash": "5133988133da46124779d5c57b03ecf9",
     "packages": [
         {
             "name": "artisaninweb/laravel-soap",
@@ -2483,16 +2483,16 @@
         },
         {
             "name": "noorfarooqy/noorauth",
-            "version": "v1.0.0",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/noorfarooqy/noorauth.git",
-                "reference": "a9e7609a639a721b74622c64a6b964a6d66d8265"
+                "reference": "b162adac09801de083026913247a919cd6f72c5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/noorfarooqy/noorauth/zipball/a9e7609a639a721b74622c64a6b964a6d66d8265",
-                "reference": "a9e7609a639a721b74622c64a6b964a6d66d8265",
+                "url": "https://api.github.com/repos/noorfarooqy/noorauth/zipball/b162adac09801de083026913247a919cd6f72c5f",
+                "reference": "b162adac09801de083026913247a919cd6f72c5f",
                 "shasum": ""
             },
             "require": {
@@ -2531,9 +2531,9 @@
             "description": "Customized Authentication using laravel jetstream and fortify",
             "support": {
                 "issues": "https://github.com/noorfarooqy/noorauth/issues",
-                "source": "https://github.com/noorfarooqy/noorauth/tree/v1.0.0"
+                "source": "https://github.com/noorfarooqy/noorauth/tree/v1.0.2"
             },
-            "time": "2023-11-23T10:09:47+00:00"
+            "time": "2024-02-26T21:27:40+00:00"
         },
         {
             "name": "nunomaduro/termwind",
@@ -10982,5 +10982,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

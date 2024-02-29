@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('sch_partners', function (Blueprint $table) {
             $table->id();
-            $table->string('partner_name');
+            $table->string('partner_name')->unique();
             $table->string('partner_country');
             $table->string('partner_city');
-            $table->string('partner_email');
-            $table->string('partner_telephone');
+            $table->string('partner_email')->unique();
+            $table->string('partner_telephone')->unique();
             $table->string('partner_contact_name');
             $table->foreignId('created_by')->nullable()->references('id')->on('users');
             $table->timestamps();

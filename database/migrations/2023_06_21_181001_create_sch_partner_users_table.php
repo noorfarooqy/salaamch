@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sch_partner_users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('partner_id')->references('id')->on('sch_partners');
-            $table->foreignId('users')->unique()->references('id')->on('users');
+            $table->foreignId('user')->unique()->references('id')->on('users');
             $table->boolean('is_active')->default(true);
             $table->foreignId('created_by')->nullable()->references('id')->on('users');
             $table->timestamps();
