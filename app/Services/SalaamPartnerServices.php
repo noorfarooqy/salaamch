@@ -181,8 +181,8 @@ class SalaamPartnerServices extends NoorServices
             if ($response["statusCode"] != 200) {
                 $this->setError($response['statusMessage']);
                 // $this->setStatus($response['statusCode']);
-                $deposit->statusCode = $response['statusCode'];
-                $deposit->statusMessage = $response['statusMessage'];
+                $deposit->status_code = $response['statusCode'];
+                $deposit->status_message = $response['statusMessage'];
                 $deposit->save();
                 DB::commit();
                 return $this->getResponse();
