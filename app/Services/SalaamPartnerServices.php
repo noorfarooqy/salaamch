@@ -240,7 +240,7 @@ class SalaamPartnerServices extends NoorServices
             return false;
         }
         Log::info($balance);
-        if ($balance->data->ccy == 'USD') {
+        if ($balance->original->data->ccy == 'USD') {
             $data['local_amount'] = $data['amount_in_usd'];
         } else {
             $rate = $this->bank->getExchangeRate($from = 'USD', $to = 'KES');
@@ -253,8 +253,8 @@ class SalaamPartnerServices extends NoorServices
             }
             $data['local_amount'] = $data['amount_in_usd'] * $rate?->data?->salerate;
         }
-        if ($balance->data->current_balance < ($data['local_amount'] + $this->bank->getTransactionCharge($data['local_amount'], 'sch'))) {
-            $this->setError('Insufficient account balance - ' . $balance->data->current_balance, ErrorCodes::sch_insufficient_account_balance->value);
+        if ($balance->original->data->current_balance < ($data['local_amount'] + $this->bank->getTransactionCharge($data['local_amount'], 'sch'))) {
+            $this->setError('Insufficient account balance - ' . $balance->original->data->current_balance, ErrorCodes::sch_insufficient_account_balance->value);
             return false;
         }
         return $data;
