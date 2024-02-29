@@ -304,6 +304,9 @@ class SalaamPartnerServices extends NoorServices
                 'user' => $request->user()?->id,
                 'created_by' => $request->user()?->id,
             ]);
+            $this->setError('', 0);
+            $this->setSuccess('success');
+            return $this->getResponse($partner);
         } catch (Throwable $th) {
             $this->setError($th->getMessage());
             return $this->getResponse();
