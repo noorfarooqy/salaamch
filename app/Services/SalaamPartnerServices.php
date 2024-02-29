@@ -108,15 +108,19 @@ class SalaamPartnerServices extends NoorServices
             return $this->getResponse();
         }
 
-        $blocked_amount = $this->bank->blockAmount($data['sender_account_number'], $data['local_amount']);
+        $trn_id = time();
+        $srcId = 'ESB' . gmdate('ymdis', time());
+        $acc =  $data['sender_account_number'];
+        $branch =  substr($data['sender_account_number'], 0, 3);
+        $amount = $data['local_amount'];
+        $hp_code = config('salaamch.block.hp_code', 'MPESA');
+        $blocked_amount = $this->bank->blockAmount($data['sender_account_number'], $branch, $amount, $hp_code, $srcId);
         $blocked = $blocked_amount->original;
         if ($blocked['error_code'] != 0) {
             $this->setError($blocked["error_message"]);
             return $this->getResponse();
         }
 
-        $trn_id = time();
-        $srcId = 'ESB' . gmdate('ymdis', time());
         $data['request_ip'] = $request->ip();
         $data['initiator'] = $request->user()?->id;
         $data['request_ref'] = $trn_id;
