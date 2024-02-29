@@ -152,7 +152,7 @@ class SalaamPartnerServices extends NoorServices
         $this->method = config('sch_config.endpoints.methods.deposit.name');
 
         try {
-            $partner = SchPartnerUser::where('user', $request->user()?->id);
+            $partner = SchPartnerUser::where('user', $request->user()?->id)->get()->first();
             if (!$partner) {
                 $this->setError('Partner not found');
                 return $this->getResponse();
