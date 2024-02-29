@@ -284,11 +284,11 @@ class SalaamPartnerServices extends NoorServices
     {
         $this->request = $request;
         $this->rules = [
-            'partner_name' => 'required|string|max:75|unique:partner_name',
+            'partner_name' => 'required|string|max:75|unique:sch_partners',
             'partner_country' => 'required|string|max:45',
             'partner_city' => 'required|string|max:45',
-            'partner_email' => 'required|email|unique:partner_email',
-            'partner_telephone' => 'required|string|max:12|unique:partner_telephone',
+            'partner_email' => 'required|email|unique:sch_partners',
+            'partner_telephone' => 'required|string|max:12|unique:sch_partners',
             'partner_contact_name' => 'required|string|max:45'
         ];
         $this->customValidate();
