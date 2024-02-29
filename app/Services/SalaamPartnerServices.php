@@ -240,6 +240,7 @@ class SalaamPartnerServices extends NoorServices
             return false;
         }
         Log::info($balance);
+        $balance = (object) $balance;
         if ($balance->original->data->ccy == 'USD') {
             $data['local_amount'] = $data['amount_in_usd'];
         } else {
