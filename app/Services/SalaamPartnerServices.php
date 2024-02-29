@@ -148,8 +148,8 @@ class SalaamPartnerServices extends NoorServices
             ],
             'channelName' => env('SCH_CHANNEL_NAME', 'SMFB'),
         ];
-        $this->endpoint = config('sch_config.endpoints.methods.deposit.api');
-        $this->method = config('sch_config.endpoints.methods.deposit.name');
+        $this->endpoint = config('salaamch.endpoints.methods.deposit.api');
+        $this->method = config('salaamch.endpoints.methods.deposit.name');
 
         try {
             $partner = SchPartnerUser::where('user', $request->user()?->id)->get()->first();
@@ -236,8 +236,8 @@ class SalaamPartnerServices extends NoorServices
             'transactionAmount' => $data['transactionAmount'],
             'channel' => "SOAP",
         ];
-        $this->endpoint = config('sch_config.endpoints.methods.status.api');
-        $this->method = config('sch_config.endpoints.methods.status.name');
+        $this->endpoint = config('salaamch.endpoints.methods.status.api');
+        $this->method = config('salaamch.endpoints.methods.status.name');
 
         $response = $this->SendSchRequest();
         if ($response["statusCode"] != 200) {
