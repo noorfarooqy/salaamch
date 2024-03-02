@@ -22,6 +22,6 @@ trait ConnectionTrait
         $url = config('salaamch.endpoints.root') . $this->endpoint;
         $response = Http::withHeaders(['Content-Type' => 'application/json'])->post($url, $this->payload);
 
-        return $response;
+        return $response->json();
     }
 }
