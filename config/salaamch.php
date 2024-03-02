@@ -5,6 +5,7 @@ return [
     'login' => env('SCH_LOGIN'),
     'password' => env('SCH_PASSWORD'),
     'secret' => env('SCH_SECRET'),
+    'product' => env('SCH_PRODUCT'),
     'endpoints' => [
         'root' => env('SCH_API_ROOT'),
         'methods' => [

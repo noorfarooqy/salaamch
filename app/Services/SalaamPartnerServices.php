@@ -176,6 +176,12 @@ class SalaamPartnerServices extends NoorServices
             Log::info('before sending request');
             $response = $this->SendSchRequest();
 
+            $origin =[
+                'branch' => substr($data['sender_account_number'],0,3),
+                'account' => $data['sender_account_number'],
+                'ccy' => 'USD',
+            ];
+
             Log::info('response');
             Log::info($response);
             if ($response["statusCode"] != 200) {
@@ -188,6 +194,13 @@ class SalaamPartnerServices extends NoorServices
                 return $this->getResponse();
             }
             Log::info('after sending request');
+
+            $transaction = $this->bank->createTransaction($amount, config('salaamch.product'), $origin, $offset = null);
+            if ($transaction['error_code']!= 0) {
+                $this->setError($transaction["error_message"]);
+                return $this->getResponse();
+            }
+            $unblocked = $this->bank->closeBlockAmount($data['sender_account_number'],$srcId);
 
             $deposit->charge_amount = $response['transactionInformation']['chargeAmount'];
             $deposit->bank_transaction_id = $response['transactionInformation']['bankTransactionId'];
