@@ -198,7 +198,7 @@ class SalaamPartnerServices extends NoorServices
             $transaction = $this->bank->createTransaction($amount, config('salaamch.product'), $origin, $offset = null);
 
             $transaction = $transaction->original;
-            Log::inf($transaction);
+            Log::info($transaction);
             Log::info('after create transaction');
             if ($transaction['error_code'] != 0) {
                 $this->setError($transaction["error_message"]);
