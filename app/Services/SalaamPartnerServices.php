@@ -179,7 +179,7 @@ class SalaamPartnerServices extends NoorServices
             $origin = [
                 'branch' => substr($data['sender_account_number'], 0, 3),
                 'account' => $data['sender_account_number'],
-                'ccy' => 'USD',
+                'ccy' => $data['ccy'],
             ];
 
             Log::info('response');
@@ -281,6 +281,7 @@ class SalaamPartnerServices extends NoorServices
         }
         Log::info($balance);
         $balance = $balance->original['data'];
+        $data['ccy'] = $balance['ccy'];
         if ($balance['ccy'] == 'USD') {
             $data['local_amount'] = $data['amount_in_usd'];
         } else {
