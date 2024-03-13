@@ -201,6 +201,7 @@ class SalaamPartnerServices extends NoorServices
             Log::info($transaction);
             Log::info('after create transaction');
             if ($transaction['error_code'] != 0) {
+                Log::info('---error on transaction creation ---');
                 $this->setError($transaction["error_message"]);
                 return $this->getResponse();
             }
