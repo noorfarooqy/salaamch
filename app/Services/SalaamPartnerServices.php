@@ -72,7 +72,7 @@ class SalaamPartnerServices extends NoorServices
         return $this->getResponse($response);
     }
 
-    public function DepositIntoAccount($request)
+    public function WithdrawFromAccount($request)
     {
         $this->initializeSalaamClearingHouse();
         $this->request = $request;
@@ -177,6 +177,7 @@ class SalaamPartnerServices extends NoorServices
             $response = $this->SendSchRequest();
 
             $origin = [
+                'xref' => $srcId,
                 'branch' => substr($data['sender_account_number'], 0, 3),
                 'account' => $data['sender_account_number'],
                 'ccy' => $data['ccy'],
@@ -223,7 +224,115 @@ class SalaamPartnerServices extends NoorServices
 
             DB::commit();
 
-            return $this->getResponse($response);
+            return $this->getResponse($transaction['data']);
+        } catch (Throwable $th) {
+            $this->setError($th->getMessage(), ErrorCodes::sch_bank_deposit_data_entry_error->value);
+            return $this->getResponse();
+        }
+    }
+    public function DepostIntoAccount($request)
+    {
+        $this->initializeSalaamClearingHouse();
+        $this->request = $request;
+
+        $this->rules = [
+            'sender_id' => 'required|numeric',
+            'sender_name' => 'required|string|min:3|max:125',
+            'sender_account_number' => 'required|numeric',
+            'sender_telephone_number' => 'required|numeric',
+            'beneficiary_telephone' => 'required|numeric',
+            'beneficiary_account_number' => 'required|numeric',
+            'amount_in_usd' => 'required|numeric|min:1|max:' . env('SCH_MAX_USD_AMOUNT', 1000),
+            'description' => 'required|string|min:4|max:125',
+            'agent_country' => 'required|string|max:45|min:2',
+            'agent_branch' => 'required|string|max:45|min:3',
+            'agent_name' => 'required|string|max:45|min:4',
+            'src_transaction_id' => 'required',
+            'checksum' => 'required|string',
+        ];
+
+        $this->customValidate();
+        if ($this->has_failed) {
+            $this->setError($this->getMessage(), ErrorCodes::sch_bank_account_required->value);
+            return $this->getResponse();
+        }
+        $data = $this->validatedData();
+
+        if ($data['checksum'] != $checksum = $this->generateChecksum($request->except('checksum'))) {
+            $this->setError('Checksum does not match ' . $checksum, ErrorCodes::sch_deposit_checksum_failed->value);
+            return $this->getResponse();
+        }
+
+
+        $data = $this->confirmBalanceAndRate($data, $only_rate = true);
+        if (!$data) {
+            return $this->getResponse();
+        }
+
+        $srcId = 'ESB' . gmdate('ymdis', time());
+        $acc =  $data['sender_account_number'];
+        $branch =  substr($data['sender_account_number'], 0, 3);
+        $amount = $data['local_amount'];
+        $hp_code = config('salaamch.block.hp_code', 'MPESA');
+
+        $data['request_ip'] = $request->ip();
+        $data['initiator'] = $request->user()?->id;
+        $data['request_ref'] = $data['src_transaction_id'];
+
+        try {
+            $partner = SchPartnerUser::where('user', $request->user()?->id)->get()->first();
+            if (!$partner) {
+                $this->setError('Partner not found');
+                return $this->getResponse();
+            }
+            DB::beginTransaction();
+            $deposit = SchTransaction::create([
+                'partner_id' => $partner->partner_id,
+                'src_transaction_id' => $data['src_transaction_id'],
+                'bank_transaction_id' => $data['src_transaction_id'],
+                'src_trn_head_id' => $srcId,
+                'sender_id' => $data['sender_id'],
+                'sender_name' => $data['sender_name'],
+                'amount_in_usd' => $data['amount_in_usd'],
+                'local_amount' => $data['local_amount'],
+                'beneficiary_account_number' => $data['beneficiary_account_number'],
+                'description' => $data['description'],
+                'bank_code' => env('SCH_BANK_CODE'),
+                'initiated_by' => $request->user()?->id,
+            ]);
+
+            $origin = [
+                'xref' => $srcId,
+                'branch' => substr($data['sender_account_number'], 0, 3),
+                'account' => $data['sender_account_number'],
+                'ccy' => $data['ccy'],
+            ];
+
+            $transaction = $this->bank->createTransaction($amount, config('salaamch.product'), $origin, $offset = null);
+
+            $transaction = $transaction->original;
+            Log::info($transaction);
+            Log::info('after create transaction');
+            if ($transaction['error_code'] != 0) {
+                Log::info('---error on transaction creation ---');
+                $this->setError($transaction["error_message"]);
+                return $this->getResponse();
+            }
+            $deposit->charge_amount = 0;
+            $deposit->bank_transaction_id = $transaction['data']['fccref'] ?? $srcId;
+            $deposit->current_balance = $data['balance'];
+            $deposit->bank_account_pan = $data['sender_id'];
+            $deposit->bank_account_title = $data['sender_name'];
+            $deposit->is_success = true;
+            $deposit->save();
+
+            Log::info('post sending request');
+            $this->setError('', 0);
+            $this->setSuccess('success');
+
+            DB::commit();
+
+            return $this->getResponse($transaction['data']);
         } catch (Throwable $th) {
             $this->setError($th->getMessage(), ErrorCodes::sch_bank_deposit_data_entry_error->value);
             return $this->getResponse();
@@ -231,7 +340,7 @@ class SalaamPartnerServices extends NoorServices
     }
 
 
-    public function TransactionStatus($request)
+    public function SchTransactionStatus($request)
     {
         $this->request = $request;
 
@@ -270,7 +379,7 @@ class SalaamPartnerServices extends NoorServices
         return $this->getResponse($response);
     }
 
-    public function confirmBalanceAndRate($data)
+    public function confirmBalanceAndRate($data, $only_rate = false)
     {
         $this->initializeSalaamClearingHouse();
 
@@ -296,10 +405,14 @@ class SalaamPartnerServices extends NoorServices
             }
             $data['local_amount'] = $data['amount_in_usd'] * $rate['salerate'];
         }
-        if ($balance['current_balance'] < ($data['local_amount'] + $this->bank->getTransactionCharge($data['local_amount'], 'sch'))) {
-            $this->setError('Insufficient account balance - ' . $balance['current_balance'], ErrorCodes::sch_insufficient_account_balance->value);
-            return false;
+        if (!$only_rate) {
+
+            if ($balance['current_balance'] < ($data['local_amount'] + $this->bank->getTransactionCharge($data['local_amount'], 'sch'))) {
+                $this->setError('Insufficient account balance - ' . $balance['current_balance'], ErrorCodes::sch_insufficient_account_balance->value);
+                return false;
+            }
         }
+        $data['balance'] = $balance['current_balance'];
         return $data;
     }
 

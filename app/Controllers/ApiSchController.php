@@ -19,8 +19,17 @@ class ApiSchController extends Controller
         return $salaamPartnerServices->verifyPartnerAccount($request);
     }
 
-    public function depositAccount(Request $request, SalaamPartnerServices $salaamPartnerServices)
+    public function withdrawFromAccount(Request $request, SalaamPartnerServices $salaamPartnerServices)
     {
-        return $salaamPartnerServices->depositIntoAccount($request);
+        return $salaamPartnerServices->WithdrawFromAccount($request);
+    }
+
+    public function depositIntoAccount(Request $request, SalaamPartnerServices $salaamPartnerServices)
+    {
+        return $salaamPartnerServices->DepostIntoAccount($request);
+    }
+
+    public function schTransactionStatus(Request $request, SalaamPartnerServices $salaamPartnerServices)
+    {
     }
 }
