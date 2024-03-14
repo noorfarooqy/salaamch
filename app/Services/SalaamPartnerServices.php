@@ -390,7 +390,7 @@ class SalaamPartnerServices extends NoorServices
         }
         Log::info($balance);
         $balance = $balance->original;
-        if ($balance['error_status'] != 0) {
+        if ($balance['error_code'] != 0) {
             $this->setError($balance['error_message'], ErrorCodes::sch_bank_account_not_found->value);
             return false;
         }
