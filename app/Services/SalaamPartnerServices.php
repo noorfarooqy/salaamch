@@ -116,7 +116,7 @@ class SalaamPartnerServices extends NoorServices
         $branch =  substr($data['sender_account_number'], 0, 3);
         $amount = $data['local_amount'];
         $hp_code = config('salaamch.block.hp_code', 'MPESA');
-        $blocked_amount = $this->bank->blockAmount($data['sender_account_number'], $branch, $amount, $hp_code, $srcId);
+        $blocked_amount = $this->bank->blockAmount($data['sender_account_number'], $amount, $hp_code, $srcId, $branch);
         $blocked = $blocked_amount->original;
         if ($blocked['error_code'] != 0) {
             $this->setError($blocked["error_message"]);
