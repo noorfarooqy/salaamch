@@ -247,7 +247,7 @@ class SalaamPartnerServices extends NoorServices
             'agent_country' => 'required|string|max:45|min:2',
             'agent_branch' => 'required|string|max:45|min:3',
             'agent_name' => 'required|string|max:45|min:4',
-            'src_transaction_id' => 'required',
+            'src_transaction_id' => 'required|unique:sch_transactions',
             'checksum' => 'required|string',
         ];
 
@@ -299,7 +299,7 @@ class SalaamPartnerServices extends NoorServices
             ]);
 
             $origin = [
-                'xref' => $srcId,
+                'xref' => $data['src_transaction_id'],
                 'branch' => substr($data['beneficiary_account_number'], 0, 3),
                 'account' => $data['beneficiary_account_number'],
                 'ccy' => $data['ccy'],
