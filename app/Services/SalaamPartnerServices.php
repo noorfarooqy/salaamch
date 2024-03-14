@@ -196,7 +196,7 @@ class SalaamPartnerServices extends NoorServices
             }
             Log::info('after sending request');
 
-            $transaction = $this->bank->createTransaction($amount, config('salaamch.product'), $origin, $offset = null);
+            $transaction = $this->bank->createTransaction($amount, config('salaamch.product.withdraw'), $origin, $offset = null);
 
             $transaction = $transaction->original;
             Log::info($transaction);
@@ -264,16 +264,13 @@ class SalaamPartnerServices extends NoorServices
         }
 
 
-        $data = $this->confirmBalanceAndRate($data, $only_rate = true);
+        $data = $this->confirmBalanceAndRate($data, $is_beneficiary = true);
         if (!$data) {
             return $this->getResponse();
         }
 
         $srcId = 'ESB' . gmdate('ymdis', time());
-        $acc =  $data['sender_account_number'];
-        $branch =  substr($data['sender_account_number'], 0, 3);
         $amount = $data['local_amount'];
-        $hp_code = config('salaamch.block.hp_code', 'MPESA');
 
         $data['request_ip'] = $request->ip();
         $data['initiator'] = $request->user()?->id;
@@ -303,12 +300,12 @@ class SalaamPartnerServices extends NoorServices
 
             $origin = [
                 'xref' => $srcId,
-                'branch' => substr($data['sender_account_number'], 0, 3),
-                'account' => $data['sender_account_number'],
+                'branch' => substr($data['beneficiary_account_number'], 0, 3),
+                'account' => $data['beneficiary_account_number'],
                 'ccy' => $data['ccy'],
             ];
 
-            $transaction = $this->bank->createTransaction($amount, config('salaamch.product'), $origin, $offset = null);
+            $transaction = $this->bank->createTransaction($amount, config('salaamch.product.deposit'), $origin, $offset = null);
 
             $transaction = $transaction->original;
             Log::info($transaction);
@@ -379,11 +376,11 @@ class SalaamPartnerServices extends NoorServices
         return $this->getResponse($response);
     }
 
-    public function confirmBalanceAndRate($data, $only_rate = false)
+    public function confirmBalanceAndRate($data, $is_beneficiary = false)
     {
         $this->initializeSalaamClearingHouse();
 
-        $balance = $this->bank->getBalance($data['sender_account_number']);
+        $balance = $this->bank->getBalance($is_beneficiary ? $data['beneficiary_account_number'] : $data['sender_account_number']);
         if (!$balance) {
             $this->setError('Account balance could not be fetched - ' . $this->bank->getMessage(), ErrorCodes::sch_bank_account_not_found->value);
             return false;
@@ -408,9 +405,9 @@ class SalaamPartnerServices extends NoorServices
                 $this->setError('Exchange rate is not accurate - ' . $rate['salerate'] . ' - ' . $this->bank->getMessage(), ErrorCodes::sch_bank_could_not_fetch_fx_rate->value);
                 return false;
             }
-            $data['local_amount'] = $data['amount_in_usd'] * $rate['salerate'];
+            $data['local_amount'] = $data['amount_in_usd'] *  ($is_beneficiary ? $rate['buyrate'] : $rate['salerate']);
         }
-        if (!$only_rate) {
+        if (!$is_beneficiary) {
 
             if ($balance['current_balance'] < ($data['local_amount'] + $this->bank->getTransactionCharge($data['local_amount'], 'sch'))) {
                 $this->setError('Insufficient account balance - ' . $balance['current_balance'], ErrorCodes::sch_insufficient_account_balance->value);

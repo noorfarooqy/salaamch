@@ -5,7 +5,10 @@ return [
     'login' => env('SCH_LOGIN'),
     'password' => env('SCH_PASSWORD'),
     'secret' => env('SCH_SECRET'),
-    'product' => env('SCH_PRODUCT'),
+    'product' => [
+        'withdraw' =>  env('SCH_PRODUCT_WITHDRAW'),
+        'deposit' =>  env('SCH_PRODUCT_DEPOSIT'),
+    ],
     'endpoints' => [
         'root' => env('SCH_API_ROOT'),
         'methods' => [
