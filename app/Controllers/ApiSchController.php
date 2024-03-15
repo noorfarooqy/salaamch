@@ -31,5 +31,6 @@ class ApiSchController extends Controller
 
     public function schTransactionStatus(Request $request, SalaamPartnerServices $salaamPartnerServices)
     {
+        return $salaamPartnerServices->SchTransactionStatus($request);
     }
 }
